@@ -1,0 +1,26 @@
+# Simpan sebagai /etc/systemd/system/absensi-trinitas.service
+# Ganti WorkingDirectory dan path node bila lokasi instalasi berbeda.
+# Setelah itu jalankan:
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now absensi-trinitas
+
+[Unit]
+Description=Absensi Digital SMA Trinitas
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/absensi-trinitas
+EnvironmentFile=/var/www/absensi-trinitas/.env
+ExecStart=/usr/bin/node server.js
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ReadWritePaths=/var/www/absensi-trinitas/data
+
+[Install]
+WantedBy=multi-user.target

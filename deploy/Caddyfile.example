@@ -1,0 +1,11 @@
+# Contoh Caddyfile. Caddy mengurus sertifikat HTTPS otomatis.
+# Ganti domain dan port bila perlu, lalu jalankan: caddy run
+
+absensi.example.sch.id {
+    encode zstd gzip
+
+    reverse_proxy 127.0.0.1:3100 {
+        # Penting agar SSE /api/events tidak tertahan oleh buffering.
+        flush_interval -1
+    }
+}

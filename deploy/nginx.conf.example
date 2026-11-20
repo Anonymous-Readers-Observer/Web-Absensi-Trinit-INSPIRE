@@ -1,0 +1,46 @@
+# Contoh konfigurasi Nginx untuk Absensi Digital SMA Trinitas.
+# Ganti absensi.example.sch.id dan path sertifikat sebelum dipakai.
+# Set TRUST_PROXY=1 dan COOKIE_SECURE=true di .env setelah HTTPS aktif.
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name absensi.example.sch.id;
+
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    http2 on;
+    server_name absensi.example.sch.id;
+
+    ssl_certificate     /etc/letsencrypt/live/absensi.example.sch.id/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/absensi.example.sch.id/privkey.pem;
+
+    client_max_body_size 2m;
+
+    # SSE untuk pembaruan papan kehadiran secara langsung.
+    location /api/events {
+        proxy_pass http://127.0.0.1:3100;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Connection "";
+        proxy_buffering off;
+        proxy_cache off;
+        proxy_read_timeout 1h;
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:3100;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
