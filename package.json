@@ -1,0 +1,27 @@
+{
+  "name": "absensi-trinitas",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Absensi Digital SMA Trinitas Bandung - aplikasi web absensi berbasis GPS, multi-peran, real-time, dan analitik.",
+  "main": "server.js",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "seed": "node src/seed-cli.js",
+    "test": "node --test",
+    "check": "node --check server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "compression": "^1.8.2",
+    "dotenv": "^18.0.9",
+    "express": "^4.21.2",
+    "express-rate-limit": "^8.7.3",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.3"
+  }
+}
